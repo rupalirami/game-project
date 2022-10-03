@@ -1,0 +1,26 @@
+A quiz game
+1) set up a web page with
+Card tag with class Trivia
+	- header tag with class Trivia__Header  
+		- with home icon  on left and counter on right
+	- div tag with class Trivia__Questions
+		- image
+		- Question
+	- div tag with class Trivia__Answers
+		- 4 buttons for answers with class Trivia__Answers
+			- on hover turn different hue of color
+			- on click turn green for right answer	
+			- on click turn red for wrong answer
+	- div tag with class Trivia__Message showing encouragement message
+	- button tag with class Trivia__Next showing "Next Question"
+2) In JS 
+- Create an object trivia questions and answers
+- Build the card HTML tag dynamically with object Trivia details on click of Trivia__Next
+- Build a counter logic
+
+
+Dots and Boxes
+
+2) In JS
+- Get number of players and assign them different colors
+-  
