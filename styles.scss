@@ -6,6 +6,7 @@ $computerSideColor: #901904;
 $regularSideColor: #6c757d;
 $regularFontColor: #212529;
 $regularGridColor: #DDDDDD;
+$buttonFontColor: #DDDDDD;
 $shadowColor: #6c757d;
 //resets
 * { // * start
@@ -13,7 +14,8 @@ $shadowColor: #6c757d;
     // padding: 0;
     box-sizing: border-box; // it calculates size using margin and border, if width=100px, margin=10px box-sizing will be 110px
     font-family: sans-serif, Arial, Helvetica;
-    color: $regularFontColor;
+    // color: $regularFontColor;
+    color: $shadowColor;
     font-size: 20px;
 
 } // * end
@@ -66,6 +68,7 @@ h1 {
     width: 45px;
     height: 0px;
     margin: 2px 4px 2px 4px;
+
     // rotate: 90deg;
     background-color: $regularSideColor;
     border: 2px solid $regularSideColor;
@@ -91,10 +94,11 @@ h1 {
     flex-direction: row;  
 }
 #start-game {
-    width: 90px;
+    width: 220px;
     background-color: #457b9d;
     border-radius: 5px;
     margin: 10px;
+    color: $buttonFontColor;
 }
 .get-player-name {
     display: flex;
@@ -102,6 +106,5 @@ h1 {
     justify-content: space-between;
     align-items: center;
     padding: auto;
-
     // margin: 10px;
 }
