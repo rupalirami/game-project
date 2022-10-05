@@ -1,9 +1,12 @@
 $fontFamily: sans-serif, Arial, Helvetica;
-$playerGridColor: #669bbc;
+$playerName: #12364d;
+$playerFontColor: #DDDDDD;
 $playerSideColor: #12364d;
+$playerGridColor: #669bbc;
 $computerGridColor: #d58881;
 $computerSideColor: #901904;
-$regularSideColor: #6c757d;
+// $regularSideColor: #6c757d;
+$regularSideColor: #cecece;
 $regularFontColor: #212529;
 $regularGridColor: #DDDDDD;
 $buttonFontColor: #DDDDDD;
@@ -87,17 +90,32 @@ h1 {
     width: 55px;
     height: 45px;
     margin-bottom: 1px;
+    color: $shadowColor;
+    font-weight:400;
+    padding-top: 9px;
+    text-align: center;
     background-color: $regularGridColor;
 }
 .cell-column {
     display: flex;
     flex-direction: row;  
 }
+.display {
+    // display: none;
+    display: flex;
+    color: $regularFontColor;
+    font-weight: bold;
+    margin: auto;
+    padding-bottom: 15px;
+}
+#player1-score {
+    margin-right: 10px;
+}
 #start-game {
     width: 220px;
     background-color: #457b9d;
     border-radius: 5px;
-    margin: 10px;
+    margin-top: 10px;
     color: $buttonFontColor;
 }
 .get-player-name {
@@ -107,4 +125,9 @@ h1 {
     align-items: center;
     padding: auto;
     // margin: 10px;
+}
+#username {
+    color: $playerName;
+    // font: 10px;
+    font-size: medium;
 }

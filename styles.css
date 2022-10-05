@@ -53,22 +53,26 @@ h1 {
   width: 45px;
   height: 0px;
   margin: 2px 4px 2px 4px;
-  background-color: #6c757d;
-  border: 2px solid #6c757d;
+  background-color: #cecece;
+  border: 2px solid #cecece;
 }
 
 .vertical {
   width: 0px;
   height: 45px;
   margin: 2px 4px 2px 4px;
-  background-color: #6c757d;
-  border: 2px solid #6c757d;
+  background-color: #cecece;
+  border: 2px solid #cecece;
 }
 
 .grid {
   width: 55px;
   height: 45px;
   margin-bottom: 1px;
+  color: #6c757d;
+  font-weight: 400;
+  padding-top: 9px;
+  text-align: center;
   background-color: #DDDDDD;
 }
 
@@ -77,11 +81,23 @@ h1 {
   flex-direction: row;
 }
 
+.display {
+  display: flex;
+  color: #212529;
+  font-weight: bold;
+  margin: auto;
+  padding-bottom: 15px;
+}
+
+#player1-score {
+  margin-right: 10px;
+}
+
 #start-game {
   width: 220px;
   background-color: #457b9d;
   border-radius: 5px;
-  margin: 10px;
+  margin-top: 10px;
   color: #DDDDDD;
 }
 
@@ -91,4 +107,9 @@ h1 {
   justify-content: space-between;
   align-items: center;
   padding: auto;
+}
+
+#username {
+  color: #12364d;
+  font-size: medium;
 }/*# sourceMappingURL=styles.css.map */
