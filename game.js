@@ -26,6 +26,7 @@ let player2ScoreCount = 0;
 let horSides = [];
 let verSides = [];
 let gridCells = [];
+let clickedSides = [];
 
 // Set up start game event listener and initialize variables on click
 startGame.addEventListener("click", (event) => {
@@ -54,7 +55,7 @@ startGame.addEventListener("click", (event) => {
     gridValue[8].textContent = player2.charAt(0);
     // create arrays for updating
     createSides();
-    // console.log(allSides);
+    console.log(allSides);
     createGridCells();
     console.log(gridCells);
     // change side color on clicks according to current player value
@@ -84,24 +85,26 @@ const changeSideColor = (sideArray) => {
         console.log(`curr player=${currentPlayer}`);
         if (currentPlayer === player1) {
             sideValue[i].style.border = `2px solid ${player1SideColor}`;
-            sideValue[i].style.backgroundColor = `${player1SideColor}`;
+            // sideValue[i].style.backgroundColor = `${player1SideColor}`;
             currentPlayer = player2;
             console.log(`in if curr player=${currentPlayer}`);
         } else { // remove this when using random for computer
             sideValue[i].style.border = `2px solid ${player2SideColor}`;
-            sideValue[i].style.backgroundColor = `${player2SideColor}`;
+            // sideValue[i].style.backgroundColor = `${player2SideColor}`;
             currentPlayer = player1;
             console.log(`in else curr player=${currentPlayer}`);
         }
         console.log(`after if curr player=${currentPlayer}`);
-        console.log(`sidevalue=${sideValue[i].id}`);
+        console.log(`in change side sidevalue=${sideValue[i].id}`);
         // update side to isClicked in sideArray
         updateSide(sideArray,sideValue[i].id);
+        // console.log(`in changeSide clickedSides=${clickedSides}`);
+        console.log(`in changeSide clickedsides = ${clickedSides}`);
+        console.log(`in changeSide allsides = ${allSides}`);
 
 
 // update grid to increment sideClickedCount
 // if sideClickedCount = 3 then switch player, get id of side not clicked and change side color, update capturedBy to player name, change grid color to player grid color and grid text to player initial
-
 
         return;
         // console.log(`in side click allSide=${allSides}`)
@@ -115,8 +118,8 @@ const createSides = () => {
     verSides, horSides = [];
     // horSides = [];   
     for (let i = 0; i < 72; i++) {
-        horSides[i] = [{sideId:`side-hor-${i+1}`,isClicked: false}];
-        verSides[i] = [{sideId:`side-ver-${i+1}`,isClicked: false}];
+        horSides[i] = [`side-hor-${i+1}`];
+        verSides[i] = [`side-ver-${i+1}`];
     }
     return allSides = horSides.concat(verSides);
 };
@@ -128,23 +131,24 @@ const createGridCells = () => {
     }
     return gridCells;
 };
-// Function to update side isClicked = true in allSides array when a side is clicked
+
+// Function to update side isClicked = true in allSides array when a side is clicked 
+// modified to create new clicked array and remove the clicked side from allSides array
 const updateSide = (array, side) => {
-    console.log(`in updateside side=${side}`);
-    // console.log(array);
-    console.log(`array length= ${array.length}`);
-    array.forEach((element) => {
-        console.log(`element length= ${element.length}`);
-        for (let i = 0; i < element.length; i++) {
-            if (element[i].sideId === side) {
-                element[i].isClicked = true;
-                console.log(`i=${i}`);
-                console.log(element[i].sideId);
-                console.log(element[i].isClicked);
-                return;
-            }
+    // console.log(`in updateside side=${side}`);
+    // console.log(`array[0]=${array[0]}`);
+    // console.log(`typeof array[i]=${typeof array[0]}`);
+    let found = false;
+    for (let i = 0; i < array.length && !found; i++) {
+        if (array[i] == side) {
+            // console.log(`in if i=${i}`);
+            found = true;
+            console.log(`array[i]=${array[i]}`);
+            clickedSides.push(array.splice(i,1));
+            console.log(`in updateside found=${found} clickedside=${clickedSides}`);
+            break
         }
-    });
+    }
 };
 // Function to update grid side values when side is updated and update sideClickedCount return sideClickedCount
 
