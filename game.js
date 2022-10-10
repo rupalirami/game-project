@@ -10,10 +10,6 @@ const displayScore = document.querySelector(".display");
 const player1Score = document.querySelector("#player1-score");
 const player2Score = document.querySelector("#player2-score");
 // Set up color variables
-// const player1GridColor = "#669bbc";
-// const player1SideColor = "#12364d";
-// const player2GridColor = "#d58881";
-// const player2SideColor = "#901904";
 const player1GridColor = "#c2e7ff";
 const player1SideColor = "#103e8f";
 const player2GridColor = "#efa8b8";
@@ -36,32 +32,32 @@ let isExtraTurn = false;
 // Set up start game event listener and initialize variables on click
 startGame.addEventListener("click", (event) => {
     event.preventDefault();
-    console.log("in start game click");
+    if (player1Name.value != "") {
+        console.log("in start game click");
     // get player details and display scores
         player1 = player1Name.value;
+        // make player1 proper case
+        console.log(player1);
+        player1 = player1.charAt(0).toUpperCase() + player1.slice(1);
+        console.log(`propercase player1=${player1}`);
         player2 = "Computer";
         currentPlayer = player1Name.value;
+        // remove player name input display
         playerName.style.display = "none";
-        displayScore.style.display = "flex";
-        player1Score.innerHTML = `${player1Name.value}: ${player1ScoreCount} `;
-        player1Score.style.color = player1SideColor;
-        // player1Score.style.font = "bold 20px";
-        player2Score.innerHTML = `vs."Computer: ${player2ScoreCount}`;
-        player2Score.style.color = player2SideColor;
-        // player2Score.style.font = "bold 20px";
-console.log(`in play game extra turn=${isExtraTurn}`);
-        // console.log(`${player1Name}: ${player1ScoreCount} vs."Computer: ${player1ScoreCount}`);
-        // console.log(`player1=${player1.charAt(0)}, player2=${player2}`);
-
-    // create arrays for updating
+        // display scores
+        displayScoreValues();
+        console.log(`in play game extra turn=${isExtraTurn}`);
+        // create arrays for updating
         createSides();
-    // console.log(allSides);
 
-    // createGridCells(); --- DOESN'T WORK
-        // // console.log(gridCells);
+        // create grid cells as array of objects
+        //createGridCells(); //--- DOESN'T WORK
+        // console.log(gridCells);
 
-    // // change side color on clicks according to current player value
+        // change side color on clicks according to current player value
         changeSideColor(allSides);
+    }
+
 });
 
 // TESTING
@@ -87,11 +83,15 @@ const changeSideColor = (sideArray) => {
         console.log(`in changeside id=${sideValue[i].id}`);
         console.log(`curr player=${currentPlayer}`);
         console.log(`in changeside1 extra turn=${isExtraTurn}`);
-
+        // get current player side color
         getPlayerSideColor(currentPlayer);
+        // change the side color
         sideValue[i].style.border = `2px solid ${playerSideColor}`;
+        // update sides as clicked
         updateSide(sideArray, sideValue[i].id);
+        // update side in grid and increase sideClickedCounter
         updateGrid(gridArray, sideValue[i].id, currentPlayer);
+        // check for extra turn
         console.log(`in changeside2 extra turn=${isExtraTurn}`);
         if (!isExtraTurn) {
             changePlayer(currentPlayer);
@@ -102,25 +102,25 @@ const changeSideColor = (sideArray) => {
     };
 }
 
-// Functions to get player colors and switch players
+// Functions to get/display player colors and switch players
 const getPlayerSideColor = (player) => {    
-    console.log(`in get player side=${player}`);
+    // console.log(`in getplayersidecolor=${player}`);
     if (player === player1) {
         playerSideColor = player1SideColor;
     } else { // remove this when using random for"Computer
         playerSideColor = player2SideColor;
     }
-    console.log(`playerSideColor=${player1SideColor}`);
+    // console.log(`playerSideColor=${player1SideColor}`);
     return;
 };
 const getPlayerGridColor = (player) => {    
-    console.log(`in get player grid=${player}`);
+    // console.log(`in get playergridcolor=${player}`);
     if (player === player1) {
         playerGridColor = player1GridColor;
     } else { // remove this when using random for"Computer
         playerGridColor = player2GridColor;
     }
-    console.log(`playerGridColor=${playerGridColor}`);
+    // console.log(`playerGridColor=${playerGridColor}`);
     return;
 };
 const changePlayer = (player) => {    
@@ -134,16 +134,23 @@ const changePlayer = (player) => {
     console.log(`in change player after if= ${player}, current player=${currentPlayer}`);
     return;
 };
+const displayScoreValues = () => {
+    displayScore.style.display = "flex";
+    player1Score.innerHTML = `${player1}: ${player1ScoreCount} `;
+    player1Score.style.color = player1SideColor;
+    player2Score.innerHTML = `vs. Computer: ${player2ScoreCount}`;
+    player2Score.style.color = player2SideColor;
+    return;
+};
 
 // Function to create sides array with object having sideId and isClicked = false when play game is clicked
 const createSides = () => {
     console.log("in create sides");
-    allSides, verSides, horSides = [];
-    // horSides = [];   
+    allSides, verSides, horSides = []; 
     for (let i = 0; i < 72; i++) {
         horSides[i] = [`side-hor-${i+1}`];
         verSides[i] = [`side-ver-${i+1}`];
-    }
+    };
     return allSides = horSides.concat(verSides);
 };
 // Function to create gridCells object with 4 side values and sideClickedCount = 0 false when play game is clicked
@@ -217,9 +224,14 @@ console.log(`side=${side}`);
                     console.log(`bef curr player=${currentPlayer}`);
                     if (player === player1) {
                         currentPlayer = player1;
+                        player1ScoreCount = player1ScoreCount + 1;
                     } else { // remove this when using random for"Computer
                         currentPlayer = player2;
+                        player2ScoreCount = player2ScoreCount + 1;
+
                     }
+                    console.log(`p1 score=${player1ScoreCount}; p2 score=${player2ScoreCount}`);
+                    displayScoreValues();
                     isExtraTurn = true;
                     console.log(`in upd grid aft curr player=${currentPlayer}, extraturn=${isExtraTurn}`);
                 } else {
