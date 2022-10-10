@@ -20,8 +20,8 @@ const player2GridColor = "#efa8b8";
 const player2SideColor = "#c9184a";
 // Set up player variables
 let player1 = player1Name.value;
-let player2 = "Comp";
-let currentPlayer = player1Name.value;
+let player2 = "Computer";
+let currentPlayer = player1;
 let player1ScoreCount = 0;
 let player2ScoreCount = 0;
 let playerSideColor = "";
@@ -31,7 +31,7 @@ let horSides = [];
 let verSides = [];
 let allSides = [];
 let clickedSides = [];
-let gridResults = [];
+let isExtraTurn = false;
 
 // Set up start game event listener and initialize variables on click
 startGame.addEventListener("click", (event) => {
@@ -39,24 +39,27 @@ startGame.addEventListener("click", (event) => {
     console.log("in start game click");
     // get player details and display scores
         player1 = player1Name.value;
-        player2 = "Comp";
+        player2 = "Computer";
         currentPlayer = player1Name.value;
         playerName.style.display = "none";
         displayScore.style.display = "flex";
         player1Score.innerHTML = `${player1Name.value}: ${player1ScoreCount} `;
         player1Score.style.color = player1SideColor;
         // player1Score.style.font = "bold 20px";
-        player2Score.innerHTML = `vs. Computer: ${player2ScoreCount}`;
+        player2Score.innerHTML = `vs."Computer: ${player2ScoreCount}`;
         player2Score.style.color = player2SideColor;
         // player2Score.style.font = "bold 20px";
-        console.log(`${player1Name}: ${player1ScoreCount} vs. Computer: ${player1ScoreCount}`);
-        console.log(`player1=${player1.charAt(0)}, player2=${player2}`);
+console.log(`in play game extra turn=${isExtraTurn}`);
+        // console.log(`${player1Name}: ${player1ScoreCount} vs."Computer: ${player1ScoreCount}`);
+        // console.log(`player1=${player1.charAt(0)}, player2=${player2}`);
 
     // create arrays for updating
         createSides();
     // console.log(allSides);
+
     // createGridCells(); --- DOESN'T WORK
         // // console.log(gridCells);
+
     // // change side color on clicks according to current player value
         changeSideColor(allSides);
 });
@@ -71,7 +74,7 @@ startGame.addEventListener("click", (event) => {
 // console.log(gridValue[1].id);
 // console.log(gridValue.length);
 
-// Function to switch players for random generation of side click by computer
+// Function to switch players for random generation of side click by"Computer
 // const switchPlayer = ()
 
 // Function to create event listener for sides, change color and update isClicked in sides array on clicking of side
@@ -80,51 +83,57 @@ const changeSideColor = (sideArray) => {
         //add listener
         sideValue[i].addEventListener("click", () => {
 
-        console.log(`i=${i}`);
+        // console.log(`i=${i}`);
         console.log(`in changeside id=${sideValue[i].id}`);
-        console.log(`player1=${player1}, player2=${player2}`);
-        console.log(`curr player=${currentPlayer}`)
-        if (currentPlayer === player1) {
-            playerSideColor = player1SideColor;
-            playerGridColor = player1GridColor;
-            currentPlayer = player2;
+        console.log(`curr player=${currentPlayer}`);
+        console.log(`in changeside1 extra turn=${isExtraTurn}`);
 
-            console.log(`in if curr player=${currentPlayer}`);
-        } else { // remove this when using random for computer
-            playerSideColor = player2SideColor;
-            playerGridColor = player2GridColor;
-            currentPlayer = player1;
-
-            console.log(`in else curr player=${currentPlayer}`);
-        }
-
+        getPlayerSideColor(currentPlayer);
         sideValue[i].style.border = `2px solid ${playerSideColor}`;
-        // sideValue[i].style.backgroundColor = `${playerSideColor}`;
-        // update side to isClicked in sideArray
-        updateSide(sideArray,sideValue[i].id);
-
-        // console.log(`in changeSide clickedSides=${clickedSides}`);
-        // console.log(`in changeSide allsides = ${allSides}`);
-
-        // update grid to increment sideClickedCount
-        updateGrid(gridArray,sideValue[i].id);
-        
-// if sideClickedCount = 3 then switch player, get id of side not clicked and change side color, update capturedBy to player name, change grid color to player grid color and grid text to player initial
-    //     if (gridcount === 4) {
-    // // Change grid color for testing
-    // gridValue[0].style.backgroundColor=`${playerGridColor}`;
-    // gridValue[0].textContent = player1.charAt(0);
-    // gridValue[8].style.backgroundColor=`${player2GridColor}`;
-    //// test for updating grid text to Comp, doesn't work as font doesn't change
-    //// gridValue[8].textContent = player2.substring(1,4);
-    // gridValue[8].textContent = player2.charAt(0);
-    //     };
-       
+        updateSide(sideArray, sideValue[i].id);
+        updateGrid(gridArray, sideValue[i].id, currentPlayer);
+        console.log(`in changeside2 extra turn=${isExtraTurn}`);
+        if (!isExtraTurn) {
+            changePlayer(currentPlayer);
+        }
         return;
         // console.log(`in side click allSide=${allSides}`)
         });
     };
 }
+
+// Functions to get player colors and switch players
+const getPlayerSideColor = (player) => {    
+    console.log(`in get player side=${player}`);
+    if (player === player1) {
+        playerSideColor = player1SideColor;
+    } else { // remove this when using random for"Computer
+        playerSideColor = player2SideColor;
+    }
+    console.log(`playerSideColor=${player1SideColor}`);
+    return;
+};
+const getPlayerGridColor = (player) => {    
+    console.log(`in get player grid=${player}`);
+    if (player === player1) {
+        playerGridColor = player1GridColor;
+    } else { // remove this when using random for"Computer
+        playerGridColor = player2GridColor;
+    }
+    console.log(`playerGridColor=${playerGridColor}`);
+    return;
+};
+const changePlayer = (player) => {    
+    console.log(`in change player=${player}`);
+    console.log(`in change player extra turn=${isExtraTurn}`);
+    if (player === player1) {
+        currentPlayer = player2;
+    } else { // remove this when using random for"Computer
+        currentPlayer = player1;
+    }
+    console.log(`in change player after if= ${player}, current player=${currentPlayer}`);
+    return;
+};
 
 // Function to create sides array with object having sideId and isClicked = false when play game is clicked
 const createSides = () => {
@@ -177,7 +186,7 @@ const updateSide = (array, side) => {
             found = true;
             console.log(`array[i]=${array[i]}`);
             clickedSides.push(array.splice(i,1));
-            console.log(`in updateside found=${found} clickedside=${clickedSides}`);
+            // console.log(`in updateside found=${found}clickedside=${clickedSides}`);
             break
         }
     }
@@ -186,10 +195,10 @@ const updateSide = (array, side) => {
 
 // Function to update grid side values when side is updated and update sideClickedCount return sideClickedCount
 
-const updateGrid = (array, side) => {
+const updateGrid = (array, side, player) => {
     console.log(`in updateGrid`);
 console.log(`side=${side}`);
-    array.forEach(element => {
+    array.forEach((element, index) => {
         // console.log(`gridId=${element.gridId}`);
         // console.log(`sides=${element.sides}`);
         // console.log(`sideClickedCount=${element.sideClickedCount}`);
@@ -198,6 +207,24 @@ console.log(`side=${side}`);
             if (element.sides[i] === side) {
                 ++element.sideClickedCount;
                 console.log(`in if gridID=${element.gridId};sideClickedCount=${element.sideClickedCount}`);
+                if (element.sideClickedCount === 4) {
+                    getPlayerGridColor(player);
+                    // console.log(`element=${element}`);
+                    console.log(`gridID when count is 4=${element.gridId}`);
+                    console.log(`index=${index}`);
+                    gridValue[index].style.backgroundColor=`${playerGridColor}`;
+                    gridValue[index].textContent = currentPlayer.charAt(0).toUpperCase();
+                    console.log(`bef curr player=${currentPlayer}`);
+                    if (player === player1) {
+                        currentPlayer = player1;
+                    } else { // remove this when using random for"Computer
+                        currentPlayer = player2;
+                    }
+                    isExtraTurn = true;
+                    console.log(`in upd grid aft curr player=${currentPlayer}, extraturn=${isExtraTurn}`);
+                } else {
+                    isExtraTurn = false;
+                }
             }
         }
     });
