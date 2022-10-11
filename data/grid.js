@@ -198,7 +198,8 @@ export const gridArray = [
         sides: ["side-hor-34","side-ver-39","side-hor-42","side-ver-38"],
         sideClickedCount: 0,
         capturedBy: ""
-    },    {
+    },    
+    {
         gridId: "grid-35",
         sides: ["side-hor-35","side-ver40","side-hor-43","side-ver-39"],
         sideClickedCount: 0,

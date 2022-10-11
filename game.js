@@ -6,7 +6,7 @@ const player1Name = document.querySelector("#username");
 const startGame = document.querySelector("#start-game");
 const sideValue = document.getElementsByClassName("side");
 const gridValue = document.getElementsByClassName("grid");
-const displayScore = document.querySelector(".display");
+const displayScore = document.querySelector(".score");
 const player1Score = document.querySelector("#player1-score");
 const player2Score = document.querySelector("#player2-score");
 // Set up color variables
@@ -25,9 +25,9 @@ let playerGridColor = "";
 // Set up game variables
 let horSides = [];
 let verSides = [];
-let allSides = [];
+let unclickedSides = [];
 let clickedSides = [];
-let isExtraTurn = false;
+let isExtraTurn, isGridCaptured = false;
 
 // Set up start game event listener and initialize variables on click
 startGame.addEventListener("click", (event) => {
@@ -41,6 +41,7 @@ startGame.addEventListener("click", (event) => {
         player1 = player1.charAt(0).toUpperCase() + player1.slice(1);
         console.log(`propercase player1=${player1}`);
         player2 = "Computer";
+        isExtraTurn = false;
         currentPlayer = player1Name.value;
         // remove player name input display
         playerName.style.display = "none";
@@ -55,7 +56,7 @@ startGame.addEventListener("click", (event) => {
         // console.log(gridCells);
 
         // change side color on clicks according to current player value
-        changeSideColor(allSides);
+        changeSideColor(unclickedSides);
     }
 
 });
@@ -78,11 +79,9 @@ const changeSideColor = (sideArray) => {
     for (let i = 0; i < sideValue.length; i++) {
         //add listener
         sideValue[i].addEventListener("click", () => {
-
         // console.log(`i=${i}`);
         console.log(`in changeside id=${sideValue[i].id}`);
-        console.log(`curr player=${currentPlayer}`);
-        console.log(`in changeside1 extra turn=${isExtraTurn}`);
+        console.log(`curr player=${currentPlayer}, extra turn=${isExtraTurn}`);
         // get current player side color
         getPlayerSideColor(currentPlayer);
         // change the side color
@@ -94,10 +93,10 @@ const changeSideColor = (sideArray) => {
         // check for extra turn
         console.log(`in changeside2 extra turn=${isExtraTurn}`);
         if (!isExtraTurn) {
-            changePlayer(currentPlayer);
+            switchPlayer(currentPlayer);
         }
         return;
-        // console.log(`in side click allSide=${allSides}`)
+        // console.log(`in side click allSide=${unclickedSides}`)
         });
     };
 }
@@ -123,15 +122,14 @@ const getPlayerGridColor = (player) => {
     // console.log(`playerGridColor=${playerGridColor}`);
     return;
 };
-const changePlayer = (player) => {    
-    console.log(`in change player=${player}`);
-    console.log(`in change player extra turn=${isExtraTurn}`);
+const switchPlayer = (player) => {    
+    console.log(`in switchplayer before if player=${player}, p1=${player1}, p2=${player2}, currplayer=${currentPlayer}, extra turn=${isExtraTurn}`);
     if (player === player1) {
         currentPlayer = player2;
     } else { // remove this when using random for"Computer
         currentPlayer = player1;
     }
-    console.log(`in change player after if= ${player}, current player=${currentPlayer}`);
+    console.log(`in switchplayer after if player=${player}, p1=${player1}, p2=${player2}, currplayer=${currentPlayer}, extra turn=${isExtraTurn}`);
     return;
 };
 const displayScoreValues = () => {
@@ -140,18 +138,20 @@ const displayScoreValues = () => {
     player1Score.style.color = player1SideColor;
     player2Score.innerHTML = `vs. Computer: ${player2ScoreCount}`;
     player2Score.style.color = player2SideColor;
+    const complete = checkGridCaptured(gridArray);
+    console.log(`in displayscore complete=${complete}`);
     return;
 };
 
 // Function to create sides array with object having sideId and isClicked = false when play game is clicked
 const createSides = () => {
     console.log("in create sides");
-    allSides, verSides, horSides = []; 
+    unclickedSides, verSides, horSides = []; 
     for (let i = 0; i < 72; i++) {
         horSides[i] = [`side-hor-${i+1}`];
         verSides[i] = [`side-ver-${i+1}`];
     };
-    return allSides = horSides.concat(verSides);
+    return unclickedSides = horSides.concat(verSides);
 };
 // Function to create gridCells object with 4 side values and sideClickedCount = 0 false when play game is clicked
 // const createGridCells = () => {
@@ -179,8 +179,8 @@ const createSides = () => {
 //         return gridCells;
 //     };
 
-// Function to update side isClicked = true in allSides array when a side is clicked 
-// modified to create new clicked array and remove the clicked side from allSides array
+// Function to update side isClicked = true in unclickedSides array when a side is clicked 
+// modified to create new clicked array and remove the clicked side from unclickedSides array
 
 const updateSide = (array, side) => {
     // console.log(`in updateside side=${side}`);
@@ -203,47 +203,60 @@ const updateSide = (array, side) => {
 // Function to update grid side values when side is updated and update sideClickedCount return sideClickedCount
 
 const updateGrid = (array, side, player) => {
-    console.log(`in updateGrid`);
-console.log(`side=${side}`);
+    console.log(`in updateGrid side=${side}`);
+    isGridCaptured = false;
+    console.log(`in updategrid beginning isExtraTurn=${isExtraTurn}, isGridCap=${isGridCaptured}`);
     array.forEach((element, index) => {
+        console.log(`in updategrid foreach loop isExtraTurn=${isExtraTurn}, isGridCap=${isGridCaptured}`);
         // console.log(`gridId=${element.gridId}`);
         // console.log(`sides=${element.sides}`);
         // console.log(`sideClickedCount=${element.sideClickedCount}`);
         // console.log(`len=${element.sides.length}`);
         for (let i = 0; i < element.sides.length; ++i) {
             if (element.sides[i] === side) {
+                console.log(`in updategrid if side matches isExtraTurn=${isExtraTurn}, isGridCap=${isGridCaptured}`);
                 ++element.sideClickedCount;
                 console.log(`in if gridID=${element.gridId};sideClickedCount=${element.sideClickedCount}`);
                 if (element.sideClickedCount === 4) {
                     getPlayerGridColor(player);
                     // console.log(`element=${element}`);
-                    console.log(`gridID when count is 4=${element.gridId}`);
-                    console.log(`index=${index}`);
+                    console.log(`gridID when count is 4=${element.gridId}, index=${index}`);
                     gridValue[index].style.backgroundColor=`${playerGridColor}`;
                     gridValue[index].textContent = currentPlayer.charAt(0).toUpperCase();
-                    console.log(`bef curr player=${currentPlayer}`);
+                    element.capturedBy = currentPlayer;
+                    isGridCaptured = true;
                     if (player === player1) {
-                        currentPlayer = player1;
                         player1ScoreCount = player1ScoreCount + 1;
                     } else { // remove this when using random for"Computer
-                        currentPlayer = player2;
                         player2ScoreCount = player2ScoreCount + 1;
-
-                    }
+                    } ;
+                    console.log(`capturedby=${element.capturedBy}, player=${currentPlayer}, isExtraTurn=${isExtraTurn}, isGridCap=${isGridCaptured}`);
                     console.log(`p1 score=${player1ScoreCount}; p2 score=${player2ScoreCount}`);
                     displayScoreValues();
-                    isExtraTurn = true;
-                    console.log(`in upd grid aft curr player=${currentPlayer}, extraturn=${isExtraTurn}`);
-                } else {
-                    isExtraTurn = false;
-                }
-            }
-        }
+                    console.log(`in upd grid aft curr player=${currentPlayer}`);
+                };
+            };
+        };
     });
+    if (isGridCaptured) {
+        isExtraTurn = true;
+    } else {
+        isExtraTurn = false;
+    };
+    console.log(`in updategrid after foreach isExtraTurn=${isExtraTurn}, isGridCap=${isGridCaptured}`)
     return;
 };
 
-// Function to capture grid cell and update grid values and display updated score
-const changeGridCell = (grid, sides, player) => {
+// Function to check final score and display message
+const checkGridCaptured = (array) => {
 //
+    array.forEach(item => {
+        if (item.capturedBy != ""){
+            console.log(`in checkGridCaptured ${item.gridId}`);
+            return "full"
+        } else {
+            console.log("in checkGridCaptured some cells still empty");
+            return "empty"
+        };
+    });
 };
